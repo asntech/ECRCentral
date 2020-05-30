@@ -1,13 +1,21 @@
 @extends('layouts.app')
 
 @section('template_title')
-   Funding schemes for postdoctoral fellowships
+Funding schemes and fellowships for Postdocs and early career researchers  
+@endsection
+
+@section('template_title') Funding schemes and fellowships for Postdocs and early career researchers @endsection
+@section('og_title') Funding schemes and fellowships for Postdocs and ECRs @endsection
+@section('og_url'){{ Request::url() }}@endsection
+
+@section('card_summary')@endsection
+@section('description')
+A detailed list of funding schemes and fellowships for Postdocs and early career researcher (ECRs)
 @endsection
 
 @section('template_linked_css')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch-theme-algolia.min.css">
-<link rel="stylesheet" type="text/css" href="{{ asset('css/algolia.css') }}">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/algolia.css') }}?v=1.0">
 
 @endsection
 
@@ -21,18 +29,21 @@
                 <div class="row">
 
                     <div class="col-md-12">
-                      <h4 class="page-header"><i class="fa fa-certificate"></i> Funding schemes and fellowships for early career researchers
+                      <h4 class="page-header"> Funding schemes and fellowships for early career researchers
                     </h4>
                    </div>
                  </div>
                   <div class="row">
                          
                           <div class="col-md-4">
-                            <a class="btn btn-sm btn-success" href="{{ URL::to('fundings/feed') }}" target="_blank" title="Subscribe to RSS Feeds"><i class="fa fa-rss" aria-hidden="true"></i> Subscribe to Feeds</a>
+                            <a class="btn btn-sm btn-warning" href="{{ URL::to('fundings/feed') }}" target="_blank" title="Subscribe to RSS Feeds"><i class="fa fa-rss" aria-hidden="true"></i> Subscribe to Feeds</a>
                             <a class="btn btn-sm btn-primary" href="{{ URL::to('fundings/create') }}" data-toggle="tooltip" title="Add"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Add New Funding</a>
                           <hr>                          
                             <div id="applicant_countries"></div>
                             <div id="host_countries"></div>
+                            <div id="career_levels"></div>
+                            <div id="call_frequency"></div>
+                            <div id="subjects"></div>
                             <div id="categories"></div>
                           </div>
 
@@ -78,6 +89,6 @@
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.8.0/dist/instantsearch.min.js"></script>
-<script src="{{ asset('js/algolia.js') }}"></script>
+<script src="{{ asset('js/algolia.js') }}?v=1.2"></script>
 @endsection
 

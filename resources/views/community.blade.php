@@ -43,28 +43,31 @@ ECR Community
                 @else
                     members
                 @endif
+                ({{$members->total()}})
             </small></h3>
             </div>
         </div>
         <!-- /.row -->
-        <div class="row">
-            
-            @foreach($members as $member)
-
+       @php ($count = 1)
+        @foreach($members as $member)
+            @if($count%6 == 1)
+            <div class="row">
+             @endif
             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6 text-center">
                 <div class="thumbnail">
                     @if (($member->profile) && $member->profile->avatar_status == 1)
                         <img src="{{ $member->profile->avatar }}" alt="{{ $member->name }}" width="100" height="100" border="0" class="img-circle">
                     @else
                         @if ($member->first_name && $member->last_name)
-                        <img class="round" width="140" height="140" avatar="{{ $member->first_name }} {{ $member->last_name }}">
+                        <img class="round" width="100" height="100" avatar="{{ $member->first_name }} {{ $member->last_name }}">
                         @else
-                        <img class="round" width="140" height="140" avatar="{{ $member->name }}">
+                        <img class="round" width="100" height="100" avatar="{{ $member->name }}">
                         @endif
                     @endif
 
                     <div class="caption">
-                        <a href="/profile/{{ $member->name }}">@if ($member->first_name && $member->last_name) {{ $member->first_name }} {{ $member->last_name }} @else {{ $member->name }} @endif</a>
+                        <small>
+                        <a href="/profile/{{ $member->name }}">{{$member->name}}</a></small>
                         <div class="member-type">
                             @if($member->role->name == 'user')
                                 <span class="label label-success">member</span>
@@ -114,10 +117,15 @@ ECR Community
                     </div>
                 </div>
             </div>
+            @if($count%6 == 0)
+             </div>
+            @endif
+            @php($count++)
+            @endforeach
+            @if($count%6 != 1)
+            </div>
+            @endif           
 
-            @endforeach             
-        
-        </div>
          {{ $members->links() }}
         <br><br>     
 </div>

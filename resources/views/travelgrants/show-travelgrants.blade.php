@@ -1,41 +1,41 @@
 @extends('layouts.app')
 
-@section('template_title')
-  Travel Grants for PhDs, Postdocs and ECRs
+
+@section('template_title') List of Travel funding opportunities for Postdocs and ECRs @endsection
+@section('og_title')Travel Grants for PhDs, Postdocs and ECRs @endsection
+@section('og_url'){{ Request::url() }}@endsection
+
+@section('card_summary')@endsection
+@section('description')
+A detailed list of travel grants opportunities PhDs, Postdocs and early career researcher
 @endsection
 
 @section('template_linked_css')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch-theme-algolia.min.css">
-<link rel="stylesheet" type="text/css" href="{{ asset('css/algolia.css') }}">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/algolia.css') }}?v=1.0">
 
 @endsection
 
 @section('content')
 <div class="container">
 <div class="row">
-    <!-- BEGIN SEARCH RESULT -->
     <div class="col-md-12">
         <div class="grid search">
             <div class="grid-body">
                 <div class="row">
-                    <!-- BEGIN FILTERS -->
-                    
                     <div class="col-md-12">
-                        <h4 class="page-header"><i class="fas fa-plane-departure"></i> Travel grants for early career researchers
-                         </h4>
+                        <h4 class="page-header"> Travel grants for early career researchers</h4>
                     </div>
-                    <!-- END RESULT -->
                 </div>
                  <div class="row">
-                         
                           <div class="col-md-4">
-                          <a class="btn btn-sm btn-success" href="{{ URL::to('travel-grants/feed') }}" target="_blank" title="Subscribe to RSS Feeds"><i class="fa fa-rss" aria-hidden="true"></i> Subscribe to Feeds</a>
+                          <a class="btn btn-sm btn-warning" href="{{ URL::to('travel-grants/feed') }}" target="_blank" title="Subscribe to RSS Feeds"><i class="fa fa-rss" aria-hidden="true"></i> Subscribe to Feeds</a>
                             <a class="btn btn-sm btn-primary" href="{{ URL::to('travel-grants/create') }}" data-toggle="tooltip" title="Add New Travel Grant"><i class="fa fa-plus fa-fw" aria-hidden="true"></i> Add New Travel Grant</a>
                           <hr>                            
-                            <div id="applicant_countries"></div>
-                            <div id="host_countries"></div>
-                            <div id="categories"></div>
+                            <div id="travel_purpose"></div>
+                            <div id="career_levels"></div>
+                            <div id="membership"></div>
+                            <div id="funders"></div>
                           </div>
 
                             <div class="col-md-8">
@@ -71,7 +71,7 @@
 @endsection
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.8.0/dist/instantsearch.min.js"></script>
-<script src="{{ asset('js/algolia-travelgrants.js') }}"></script>
+<script src="{{ asset('js/algolia-travelgrants.js') }}?v=1.2"></script>
 
 @endsection
 

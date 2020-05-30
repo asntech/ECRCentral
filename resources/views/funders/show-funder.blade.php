@@ -11,9 +11,24 @@
     
     <div class="row">
       <div class="col-md-12">
-      <h4><i class="fa fa-search-o"></i> {{ $funder->name }}</h4>
-      {{ $funder->country }} <br>
-      <i class="ai ai-orcid"></i> <a href="http://dx.doi.org/10.13039/{{$funder->funder_id}}" target="_blank">http://dx.doi.org/10.13039/{{$funder->funder_id}}</a>
+      <h4><i class="fa fa-search-o"></i>{{ $funder->name }}</h4>
+      {{ $funder->country }}  
+       @if($funder->dora == '1')
+       | <img src="{{ asset('images/dora.png') }}" height="20px"> DORA signatory
+      @endif
+      <br>
+      
+      @if($funder->funder_id == $funder->slug)
+        @if($funder->url != '')
+          <i class="fa fa-external-link"></i>
+          <a href="{{$funder->url}}" target="_blank">{{$funder->url}}</a>
+        @endif
+      @else
+      
+       <i class="ai ai-doi"></i>
+      <a href="http://dx.doi.org/10.13039/{{$funder->funder_id}}" target="_blank">http://dx.doi.org/10.13039/{{$funder->funder_id}}</a>
+      @endif
+
       
       @if(Auth::user() && Auth::user()->role->name != 'user')
       <div class="pull-right">

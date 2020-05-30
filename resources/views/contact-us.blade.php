@@ -65,7 +65,7 @@ Contact us
                 </form>
             -->
 
-            <p>We appreciate feedback, criticism as well as suggestions. If you would like to make an enquiry or provide your feedback, please contact Aziz on azez(dot)khan(at)gmail.com or any of the <a href="/team">team members</a>.
+            <p>We appreciate your feedback and suggestions to make ECRcentral useful for everyone. If you would like to make an enquiry or provide your feedback, please contact the ECRcentral team at <a href="mailto:ecrcentral@googlegroups.com">ecrcentral[at]googlegroups[dot]com</a>.
 
                 <br><br>We will get back to you soon. Thank you.</p>
             </div>
@@ -99,7 +99,7 @@ Contact us
             </div>
             <div class="col-md-4">
               <br>
-            <a class="twitter-timeline" href="https://twitter.com/ECRcentral?ref_src=twsrc%5Etfw">Tweets by ECRcentral</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+           <a class="twitter-timeline" data-lang="en" data-height="1000" data-link-color="#19b491" href="https://twitter.com/ECRcentral?ref_src=twsrc%5Etfw">Tweets by ECRcentral</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
         </div>
         <!-- /.row -->

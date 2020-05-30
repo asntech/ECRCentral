@@ -1,40 +1,31 @@
-<nav class="navbar navbar-default navbar-fixed-top bg-dark">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
 
             {{-- Collapsed Hamburger --}}
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                <span class="sr-only">{!! trans('titles.toggleNav') !!}</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+              </button>
 
             {{-- Branding Image --}}
             <a class="navbar-brand" href="{{ url('/') }}">
                 @if(setting('site.logo'))
+                <!--
                 <img height="100%" src="/storage/{{ setting('site.logo') }}">
+             
+                <img height="100%" src="{{ asset('images/ecrcentral-logo-footer.png') }}">
+                -->   
                 @else
                 {{ setting('site.title') }}
                 @endif
-                
             </a>
         </div>
 
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
             {{-- Left Side Of Navbar --}}
             <ul class="nav navbar-nav">
-                <!--
-                <li {{ Route::is('index') ? 'class=active' : null }}><a href="{{ route('index') }}">Home</a></li>
-                -->
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Funding <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li {{ Route::is('fundings') ? 'class=active' : null }}><a href="{{ route('fundings') }}">Funding Schemes</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li {{ Request::is('travel-grants') ? 'class=active' : null }}><a href="{{ route('travelgrants') }}">Travel Grants</a></li> 
-                  </ul>
-                </li>
+                <li {{ Route::is('fundings') ? 'class=active' : null }}><a href="{{ route('fundings') }}">Funding</a></li>
+                <li {{ Request::is('travel-grants') ? 'class=active' : null }}><a href="{{ route('travelgrants') }}">Travel Grants</a></li> 
 
                 <li {{ Request::is('resources') ? 'class=active' : null }}><a href="{{ route('resources') }}">Resources</a></li>
 
@@ -42,26 +33,23 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     
-                    <li {{ Request::is('forums') ? 'class=active' : null }}><a href="/forums">Community Forum</a></li>
-                     <li {{ Request::is('blog') ? 'class=active' : null }}> <a href="/blog">Community Blog</a></li>
+                    <li {{ Request::is('forums') ? 'class=active' : null }}><a href="/{{ Config::get('chatter.routes.home') }}/">Community Forum</a></li>
+                    
+                    <li><a href="https://ecrlife.org" target="_balank">Blog</a></li>
+                    <!--
+                    <li {{ Request::is('blog') ? 'class=active' : null }}> <a href="/blog">Community Blog</a></li>
+                -->
 
                     <li role="separator" class="divider"></li>
 
-                    <li {{ Request::is('community/members') ? 'class=active' : null }}><a href="/community/members">Members</a></li>
+                    <li {{ Request::is('community') ? 'class=active' : null }}><a href="/community">Members</a></li>
                     <li {{ Request::is('community/moderators') ? 'class=active' : null }}><a href="/community/moderators">Moderators</a></li>
                     <li {{ Request::is('community/managers') ? 'class=active' : null }}><a href="/community/managers">Managers</a></li>
-                    <!--s
-                    <li><a href="#">Mentors</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Another tab</a></li>
-                -->
                   </ul>
                 </li>
-                <!--
-                
+                <!--             
                 <li {{ Request::is('blog') ? 'class=active' : null }}> <a href="/blog">Blog</a></li>
             -->
-
                
                 <li class="dropdown" {{ Request::is('about') ? 'class=active' : null }}>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">About <span class="caret active"></span></a>
@@ -128,7 +116,7 @@
                                 <li {{ Request::is('active-users') ? 'class=active' : null }}>{!! HTML::link(url('/active-users'), Lang::get('titles.activeUsers')) !!}</li>
                             
                             @endif
-
+                            <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

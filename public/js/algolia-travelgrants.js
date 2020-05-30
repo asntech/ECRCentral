@@ -7,7 +7,7 @@ function hitTemplate(hit) {
     deadline = hit.deadline;
   }
 
-  var currentDate = new Date(hit.updated_at);
+  var currentDate = new Date(hit.updated_at.replace(/-/g, "/"));
   var date = currentDate.getDate();
   var month = currentDate.getMonth(); 
   var year = currentDate.getFullYear();
@@ -24,18 +24,18 @@ function hitTemplate(hit) {
             </a>
           </h2>
           <div class="post-excerpt">
-            ${hit._highlightResult.funder_name.value}
+             ${get_funder(hit.funders, hit._highlightResult.funder_name.value)}
             </a>
           </div>
             <div class="entry-meta clear">
             ${get_logo(hit.logos)}
             <div class="entry-funder-content">
               <div class="funder-name">
-                <i class="fas fa-user-graduate"></i> Applicant nationality: ${hit.applicant_country} | 
-<i class="fas fa-university"></i> Grant purpose: ${hit.travel_purpose.toString()}
+                 <i class="fa fa-globe"></i> Applicant nationality: ${hit.applicant_country} | 
+<i class="fa fa-university"></i> Grant purpose: ${hit.travel_purpose.toString()}
               </div>
               <div class="post-date">
-                <i class="far fa-calendar-alt"></i> Deadline: ${deadline} | Last updated: ${dateString}
+                <i class="fa fa-calendar-alt"></i> Deadline: ${deadline} | Last updated: ${dateString}
               </div>
               <!--
               <div class="post-meta-info">
@@ -48,45 +48,39 @@ function hitTemplate(hit) {
     </div>`;
 }
 
-function get_logo33(funder_name){
-  if (funder_name == 'The Royal Society'){
-    return `<div class="funder-gravatar">
-              <img src="https://royalsociety.org/~/media/Redesign2015/rs-crest-footer.png" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'Cancer Research UK'){
-    return `<div class="funder-gravatar">
-              <img src="http://commercial.cancerresearchuk.org/sites/default/files/2-Column-Image_Big-C.png" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'eLife'){
-    return `<div class="funder-gravatar">
-              <img src="https://pbs.twimg.com/profile_images/794233223551315969/uLsKoQxk_400x400.jpg" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'EMBO'){
-    return `<div class="funder-gravatar">
-              <img src="https://www.wemakescholars.com/admin/uploads/providers/1521.jpg" width="40" height="40">
-          </div>`;
+
+function get_funder(funders, funder_name){
+  if (funders != null && funders.length != 0 && funders[0] != null){
+    if(funders.length > 1)
+    {
+        return funders.join(", ");
+    }else{
+      return funders;
+    }
   }else{
-    return " ";
+    return funder_name;
   }
 
 }
 
 function get_logo(logos){
-  if (logos != null){
-    if(logos.length == 1)
+  if (logos != null && logos.length != 0 && logos[0] != null){
+    if(logos.length > 1)
     {
-    return `<div class="funder-gravatar">
-              <img src="/storage/${logos}" width="40" height="40">
-          </div>`;
-    }else{
-        logos_html = '<div class="funder-gravatar">'
+      logos_html = '<div class="funder-gravatar">'
         for(var logo in logos)
         {
-          logos_html = logos_html.concat(`<img src="/storage/${logo}" width="40" height="40">`)
+          logos_html = logos_html.concat(`<img src="/storage/${logos[logo]}" height="40">`)
         }
         return logos_html.concat('</div>');
+    
+    }else{
+      return `<div class="funder-gravatar">
+              <img src="/storage/${logos}" height="40">
+          </div>`;
     }
   }else{
+    logos = null;
     return " ";
   }
 
@@ -148,15 +142,33 @@ const search = instantsearch({
 
  search.addWidget(
   instantsearch.widgets.refinementList({
-    container: "#categories",
+    container: "#funders",
     attributeName: "funder_name",
     autoHideContainer: false,
     showMore: true,
     searchForFacetValues: false,
     collapsible: true,
-    limit: 10,
+    limit: 5,
     templates: {
       header: "Funders"
+    }
+  }
+  )
+);
+
+// widget to add Funders list.
+
+ search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#membership",
+    attributeName: "membership",
+    autoHideContainer: false,
+    showMore: true,
+    searchForFacetValues: false,
+    collapsible: true,
+    limit: 2,
+    templates: {
+      header: "Membership required?"
     }
   }
   )
@@ -166,9 +178,9 @@ const search = instantsearch({
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: "#applicant_countries",
+    container: "#travel_purpose",
     attributeName: "travel_purpose",
-    autoHideContainer: true,
+    autoHideContainer: false,
     showMore: true,
     searchForFacetValues: false,
     collapsible: true,
@@ -181,6 +193,23 @@ search.addWidget(
   )
 );
 
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#career_levels",
+    attributeName: "career_levels",
+    autoHideContainer: false,
+    showMore: true,
+    searchForFacetValues: false,
+    collapsible: true,
+    limit: 6,
+    templates: {
+      header: "Career level"
+    }
+  }
+
+  )
+);
 
 
 // Uncomment the following widget to add pagination.

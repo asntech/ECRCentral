@@ -24,7 +24,7 @@ class TravelGrant extends Model
 
     public function isPublished()
     {
-        return $this->status !== 0;
+        return ($this->status === 1);
     }
 
     /**
@@ -46,6 +46,7 @@ class TravelGrant extends Model
 
         $extraFields = [
             'travel_purpose' => $this->purposes->pluck('name')->toArray(),
+            'career_levels' => $this->career_levels->pluck('name')->toArray(),
             'funders' => $this->funders->pluck('name')->toArray(),
             'logos' => $this->funders->pluck('logo')->toArray(),
         ];
@@ -79,6 +80,15 @@ class TravelGrant extends Model
     public function purposes()
     {
         return $this->belongsToMany(TravelPurpose::class, 'travelpurpose_travelgrant');
+
+    }
+
+    /**
+     * The career_levels that belong to the travel grants.
+     */
+    public function career_levels()
+    {
+        return $this->belongsToMany(CareerLevel::class, 'careerlevel_travelgrant');
 
     }
 

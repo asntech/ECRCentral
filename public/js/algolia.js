@@ -7,7 +7,7 @@ function hitTemplate(hit) {
     deadline = hit.deadline;
   }
 
-  var currentDate = new Date(hit.updated_at);
+  var currentDate = new Date(hit.updated_at.replace(/-/g, "/"));
   var date = currentDate.getDate();
   var month = currentDate.getMonth(); 
   var year = currentDate.getFullYear();
@@ -24,18 +24,18 @@ function hitTemplate(hit) {
             </a>
           </h2>
           <div class="post-excerpt">
-            ${hit._highlightResult.funder_name.value}
+          ${get_funder(hit.funders, hit._highlightResult.funder_name.value)}
             </a>
           </div>
             <div class="entry-meta clear">
             ${get_logo(hit.logos)}
             <div class="entry-funder-content">
               <div class="funder-name">
-                <i class="fas fa-user-graduate"></i> Applicant nationality: ${hit.applicant_country} | 
-<i class="fas fa-university"></i> Host country: ${hit.host_country}
+                <i class="fa fa-globe"></i> Applicant nationality: ${hit.applicant_country} | 
+<i class="fa fa-university"></i> Host country: ${hit.host_country}
               </div>
               <div class="post-date">
-                <i class="far fa-calendar-alt"></i> Application deadline: ${deadline} | Last updated: ${dateString}
+                <i class="fa fa-calendar"></i> Application deadline: ${deadline} | Last updated: ${dateString}
               </div>
               <!--
               <div class="post-meta-info">
@@ -48,20 +48,34 @@ function hitTemplate(hit) {
     </div>`;
 }
 
-function get_logo(logos){
-  if (logos != null){
-    if(logos.length == 1)
+function get_funder(funders, funder_name){
+  if (funders != null && funders.length != 0 && funders[0] != null){
+    if(funders.length > 1)
     {
-    return `<div class="funder-gravatar">
-              <img src="/storage/${logos}" width="40" height="40">
-          </div>`;
+        return funders.join(", ");
     }else{
-        logos_html = '<div class="funder-gravatar">'
+      return funders;
+    }
+  }else{
+    return funder_name;
+  }
+
+}
+
+function get_logo(logos){
+  if (logos != null && logos.length != 0 && logos[0] != null){
+    if(logos.length > 1)
+    {
+      logos_html = '<div class="funder-gravatar">'
         for(var logo in logos)
         {
-          logos_html = logos_html.concat(`<img src="/storage/${logo}" width="40" height="40">`)
+          logos_html = logos_html.concat(`<img src="/storage/${logos[logo]}" height="40">`)
         }
         return logos_html.concat('</div>');
+    
+    }else{
+      return `<div class="funder-gravatar">
+              <img src="/storage/${logos}" height="40"></div>`;
     }
   }else{
     return " ";
@@ -69,28 +83,6 @@ function get_logo(logos){
 
 }
 
-function get_logo2(funder_name){
-  if (funder_name == 'American Psychological Foundation'){
-    return `<div class="funder-gravatar">
-              <img src="https://www.insidehighered.com/sites/default/server_files/styles/large/public/media/APA.png" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'National Institutes of Health'){
-    return `<div class="funder-gravatar">
-              <img src="https://www.nih.gov/sites/default/files/about-nih/2012-logo.png" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'American Gastroenterological Association'){
-    return `<div class="funder-gravatar">
-              <img src="https://www.southbaygastro.com/wp-content/uploads/2017/11/logo_aga-1.png" width="40" height="40">
-          </div>`;
-  }else if(funder_name == 'Human Frontiers in Science Program'){
-    return `<div class="funder-gravatar">
-              <img src="http://www.hfsp.org/sites/www.hfsp.org/files/webfm/Communications/logo-blue-6x6.jpg" width="40" height="40">
-          </div>`;
-  }else{
-    return " ";
-  }
-
-}
 
 function hitTemplate22(hit) {
   return `<tr>
@@ -165,14 +157,30 @@ search.addWidget(
  search.addWidget(
   instantsearch.widgets.refinementList({
     container: "#categories",
-    attributeName: "funder_name",
+    attributeName: "funders",
     autoHideContainer: false,
     showMore: true,
     searchForFacetValues: false,
-    collapsible: true,
-    limit: 10,
+    collapsible: false,
+    limit: 5,
     templates: {
       header: "Funders",
+    }
+  }
+  )
+);
+
+ search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#subjects",
+    attributeName: "subjects",
+    autoHideContainer: false,
+    showMore: true,
+    searchForFacetValues: false,
+    collapsible: false,
+    limit: 5,
+    templates: {
+      header: "Subjects",
     }
   }
   )
@@ -184,6 +192,7 @@ search.addWidget(
     attributeName: "host_country",
     autoHideContainer: false,
     showMore: true,
+    limit: 5,
     templates: {
       header: "Host country"
     }
@@ -196,13 +205,47 @@ search.addWidget(
   instantsearch.widgets.refinementList({
     container: "#applicant_countries",
     attributeName: "applicant_country",
-    autoHideContainer: true,
+    autoHideContainer: false,
     showMore: true,
+    limit: 5,
     templates: {
       header: "Applicant country"
     }
   }
 
+  )
+);
+
+ search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#career_levels",
+    attributeName: "career_levels",
+    autoHideContainer: false,
+    showMore: true,
+    searchForFacetValues: false,
+    collapsible: false,
+    limit: 5,
+    templates: {
+      header: "Academic requirement",
+    }
+  }
+  )
+);
+
+
+ search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: "#call_frequency",
+    attributeName: "frequency",
+    autoHideContainer: false,
+    showMore: true,
+    searchForFacetValues: false,
+    collapsible: false,
+    limit: 3,
+    templates: {
+      header: "Call frequency",
+    }
+  }
   )
 );
 

@@ -35,7 +35,7 @@
                     @endif
 
                     <br>                   
-                    <h4 class="media-heading">{{ $user->first_name }} {{ $user->last_name }} <small>{{ $user->profile->title }}</small></h4>
+                    <h5 class="media-heading">{{ $user->first_name }} {{ $user->last_name }} <br><small>{{ $user->profile->title }}</small></h5>
                     @if ($user->profile->organization)
                     {{ $user->profile->organization }}
                     <br>
@@ -229,7 +229,7 @@
 
                             </div>
                             <div class="pull-right">
-                            	<a class="btn btn-xs btn-white" title="Total replies"><i class="fa fa-pencil"></i> {{ $post->discussion->postsCount[0]->total }} </a>
+                            	<a class="btn btn-xs btn-white" title="Total replies"><i class="fa fa-comment"></i> {{ $post->discussion->postsCount[0]->total }} </a>
                                     <a class="btn btn-xs btn-white" title="Total views"><i class="fa fa-eye"></i> {{ $post->discussion->views }} </a>
                                 <a class="btn btn-xs btn-primary" href="/{{ Config::get('chatter.routes.home') }}/{{ Config::get('chatter.routes.discussion') }}/{{ $post->discussion->category->slug }}/{{ $post->discussion->slug }}"><i class="fa fa-pencil"></i> Reply</a>
                             </div>

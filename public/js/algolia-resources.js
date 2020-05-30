@@ -7,7 +7,7 @@ function hitTemplate(hit) {
     published = hit.published_at;
   }
 
-  var currentDate = new Date(hit.updated_at);
+  var currentDate = new Date(hit.updated_at.replace(/-/g, "/"));
   var date = currentDate.getDate();
   var month = currentDate.getMonth(); 
   var year = currentDate.getFullYear();
@@ -31,10 +31,11 @@ function hitTemplate(hit) {
             ${get_logo(hit)}
             <div class="entry-funder-content">
               <div class="funder-name">
-                <b>${hit.description}</b>
+                <b>${truncateString(hit.description, 225)}
+                </b>
               </div>
               <div class="post-date">
-                <i class="fas fa-book"></i> Category: ${hit.categories.toString()} <i class="far fa-calendar-alt"></i> Last updated: ${dateString}
+                <i class="fa fa-book"></i> Category: ${hit.categories.toString()} <i class="fa fa-calendar"></i> Last updated: ${dateString}
               </div>
               <!--
               <div class="post-meta-info">
@@ -51,28 +52,39 @@ function get_logo(hit){
   if(hit.logo != null)
     {
     return `<div class="funder-gravatar">
-              <img src="/storage/${hit.logo}" width="40" height="40">
+              <img src="/storage/${hit.logo}" height="40">
           </div>`;
-    }else if (hit.source_name == 'Nature'){
+    }else if (hit.source_name == 'Nature' || hit.source_name == 'Nature careers'){
     return `<div class="funder-gravatar">
-              <img src="/images/nature-logo.png" width="40" height="40">
+              <img src="/images/nature-logo.jpg" height="40">
           </div>`;
-  }else if(hit.source_name == 'Science'){
+  }else if(hit.source_name == 'Science' || hit.source_name == 'Science careers'){
     return `<div class="funder-gravatar">
-              <img src="/images/science-logo.png" width="40" height="40">
+              <img src="/images/science-logo.jpg" height="40">
           </div>`;
   }else if(hit.source_name == 'eLife'){
     return `<div class="funder-gravatar">
-              <img src="/images/elife-logo.jpg" width="40" height="40">
+              <img src="/images/elife-logo.jpg" height="40">
           </div>`;
   }else if(hit.source_name == 'EMBO'){
     return `<div class="funder-gravatar">
-              <img src="/images/embo-logo.jpg" width="40" height="40">
+              <img src="/images/embo-logo.jpg" height="40">
           </div>`;
   }else{
     return " ";
   }
 
+}
+
+function truncateString(str, num) {
+  // If the length of str is less than or equal to num
+  // Author: https://github.com/DylanAttal
+  // just return str--don't truncate it.
+  if (str.length <= num) {
+    return str
+  }
+  // Return str truncated with '...' concatenated to the end of str.
+  return str.slice(0, num) + '...'
 }
 
 const search = instantsearch({
@@ -135,7 +147,7 @@ const search = instantsearch({
     showMore: true,
     searchForFacetValues: false,
     collapsible: true,
-    limit: 10,
+    limit: 15,
     templates: {
       header: "Resource category"
     }

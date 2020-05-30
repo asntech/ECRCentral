@@ -96,12 +96,25 @@
                 {!! Form::label('published_at', 'Published date' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
                   <div class="input-group">
-                    {!! Form::text('published_at', old('published_at'), array('id' => 'published_at', 'class' => 'form-control', 'placeholder' => 'dd/mm/yyyy')) !!}
-                    <label class="input-group-addon" for="published_at"><i class="fa fa-fw fa-calander " aria-hidden="true"></i></label>
+                    {!! Form::text('published_at', old('published_at'), array('id' => 'published_at', 'class' => 'form-control', 'placeholder' => 'YYYY-MM-DD')) !!}
+                    <label class="input-group-addon" for="published_at"><i class="fa fa-calander " aria-hidden="true"></i></label>
                   </div>
                 </div>
               </div>
 
+               <div class="form-group has-feedback row {{ $errors->has('status') ? ' has-error ' : '' }}">
+                {!! Form::label('status', 'Resource status' , array('class' => 'col-md-3 control-label')); !!}
+                <div class="col-md-9">
+                  <div class="input-group">
+                    <select class="form-control" name="status">
+                      <option value="0" selected>Draft</option>
+                      @if(Auth::user() && Auth::user()->role->name != 'user')
+                      <option value="1">Publish</option>
+                       @endif
+                    </select>
+                  </div>
+                </div>
+              </div>
               
               {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Submit Resource', array('class' => 'btn btn-success btn-flat margin-bottom-1 pull-right','type' => 'submit', )) !!}
 

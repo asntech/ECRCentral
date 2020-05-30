@@ -112,6 +112,7 @@ class resourcesController extends Controller
             'url' => $request->input('url'),
             'logo' => $request->input('logo'),
             'published_at' => $request->input('published_at'),
+            #'status' => $request->input('status'),
             'status' => 0,
             'featured' => 0,
             'user_id' => $user_id,
@@ -123,7 +124,7 @@ class resourcesController extends Controller
         $resource->save();
         $resource->categories()->sync($categories);
 
-        Mail::to('azez.khan@gmail.com')->send(new resourceAdded($resource));
+        Mail::to('ecrcentral@googlegroups.com')->send(new resourceAdded($resource));
 
         return redirect('resources')->with('success', trans('resources.createSuccess'));
     }
@@ -142,7 +143,7 @@ class resourcesController extends Controller
 
         $related_resources = Resource::where('id', "!=", $resource->id)
             ->orWhere('name', 'LIKE', '%' . $resource->name . '%')
-            ->orWhere('description', 'LIKE', '%' . $resource->description . '%')->paginate(5);
+            ->orWhere('description', 'LIKE', '%' . $resource->description . '%')->take(8)->get();
 
         $data = [
             'resource'        => $resource,

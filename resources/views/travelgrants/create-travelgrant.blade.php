@@ -53,7 +53,7 @@
                 {!! Form::label('description', 'Description' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
                   <div class="input-group">
-                    {!! Form::textarea('description', old('description'), array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Add funding description')) !!}
+                    {!! Form::textarea('description', old('description'), array('id' => 'description', 'class' => 'form-control', 'placeholder' => 'Add a short description')) !!}
                     <label class="input-group-addon" for="description"><i class="fa fa-fw fa-pencil }}" aria-hidden="true"></i></label>
                   </div>
                 </div>
@@ -102,15 +102,13 @@
                 </div>
               </div>
 
-              
-
               <div class="form-group has-feedback row {{ $errors->has('membership') ? ' has-error ' : '' }}">
                 {!! Form::label('membership', 'Memberschip required?' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
                   <div class="input-group">
-                    {!! Form::text('membership', old('membership'), array('id' => 'membership', 'class' => 'form-control', 'placeholder' => 'Memberschip required?')) !!}
-                    <label class="input-group-addon" for="membership"><i class="fa fa-fw fa-pencil " aria-hidden="true"></i></label>
-                  </div>
+                  <label class="radio-inline"><input type="radio"  class='form-control' value="Yes" name="membership"> Yes</label>
+                  <label class="radio-inline"><input type="radio" class='form-control' value="No" name="membership"> No</label>
+                </div>
                 </div>
               </div>
 
@@ -124,7 +122,6 @@
                 </div>  
               </div>
 
-
               <div class="form-group has-feedback row {{ $errors->has('fields') ? ' has-error ' : '' }}">
                 {!! Form::label('fields', 'Subjects' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
@@ -134,7 +131,6 @@
                   </div>
                 </div>  
               </div>
-
               
               <div class="form-group has-feedback row {{ $errors->has('award') ? ' has-error ' : '' }}">
                 {!! Form::label('award', 'Award' , array('class' => 'col-md-3 control-label')); !!}
@@ -146,29 +142,19 @@
                 </div>
               </div>
 
-
-               <div class="form-group has-feedback row {{ $errors->has('diversity') ? ' has-error ' : '' }}">
-                {!! Form::label('diversity', 'Diversity' , array('class' => 'col-md-3 control-label')); !!}
+              <div class="form-group has-feedback row {{ $errors->has('career_levels') ? ' has-error ' : '' }}">
+                {!! Form::label('career_levels', 'Career level' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
                   <div class="input-group">
-                    {!! Form::text('diversity', old('diversity'), array('id' => 'diversity', 'class' => 'form-control', 'placeholder' => 'Diversity')) !!}
-                    <label class="input-group-addon" for="diversity"><i class="fa fa-fw fa-pencil " aria-hidden="true"></i></label>
-                  </div>
-                </div>  
-              </div>
 
-               <div class="form-group has-feedback row {{ $errors->has('career_level') ? ' has-error ' : '' }}">
-                {!! Form::label('career_level', 'Career level' , array('class' => 'col-md-3 control-label')); !!}
-                <div class="col-md-9">
-                  <div class="input-group">
-                    {!! Form::text('career_level', old('career_level'), array('id' => 'career_level', 'class' => 'form-control', 'placeholder' => 'Career level')) !!}
-                    <label class="input-group-addon" for="career_level"><i class="fa fa-fw fa-pencil " aria-hidden="true"></i></label>
+                    @foreach($career_levels as $career_level)
+                    <label>{!! Form::checkbox('career_levels[]', $career_level->id, null,  ['id' => 'career_levels']) !!} {!! $career_level->name !!} </label>
+                    &nbsp;&nbsp;
+                    @endforeach
                   </div>
-                </div>  
+                </div>
               </div>
-
               
-
               <div class="form-group has-feedback row {{ $errors->has('deadline') ? ' has-error ' : '' }}">
                 {!! Form::label('deadline', 'Application deadline' , array('class' => 'col-md-3 control-label')); !!}
                 <div class="col-md-9">
@@ -188,8 +174,21 @@
                   </div>
                 </div>
               </div>
-        
 
+               <div class="form-group has-feedback row {{ $errors->has('status') ? ' has-error ' : '' }}">
+                {!! Form::label('status', 'Status' , array('class' => 'col-md-3 control-label')); !!}
+                <div class="col-md-9">
+                  <div class="input-group">
+                    <select class="form-control" name="status">
+                      <option value="0" selected>Draft</option>
+                      @if(Auth::user() && Auth::user()->role->name != 'user')
+                      <option value="1">Publish</option>
+                       @endif                      
+                    </select>
+                  </div>
+                </div>
+              </div>
+        
               {!! Form::button('<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Submit travel grant', array('class' => 'btn btn-success btn-flat margin-bottom-1 pull-right','type' => 'submit', )) !!}
 
             {!! Form::close() !!}

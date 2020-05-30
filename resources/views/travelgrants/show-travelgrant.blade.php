@@ -1,8 +1,15 @@
 @extends('layouts.app')
 
-@section('template_title')
-{{ $travelgrant->name }}
+@section('template_title'){{ $travelgrant->name }} by {{ $travelgrant->funder_name }}@endsection
+@section('og_title'){{ $travelgrant->name }} by {{ $travelgrant->funder_name }}@endsection
+@section('og_url'){{ Request::url() }}@endsection
+
+@section('card_summary')@endsection
+@section('description')
+{{ $travelgrant->name }} by {{ $travelgrant->funder_name }} for {{ $travelgrant->purpose }} in the subject {{ $travelgrant->fields }}
 @endsection
+@section('published_time'){{ $travelgrant->created_at }}@endsection
+@section('modified_time'){{ $travelgrant->updated_at }}@endsection
 
 @section('content')
   <div class="container">
@@ -13,6 +20,9 @@
                     @if($travelgrant->funders()->exists())
                       @foreach ($travelgrant->funders as $funder)
                         <a href="/funders/{{ $funder->slug }}">{{ $funder->name }}</a>
+                        @if($funder->dora == '1')
+                           <small> <img src="{{ asset('images/dora.png') }}" height="20px"> DORA signatory </small>
+                          @endif
                       @endforeach
                     @else
                       {{ $travelgrant->funder_name }}
@@ -34,6 +44,13 @@
         <div class="alert alert-danger fade in">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             Note: This travel grant opportunity is not published/active.
+        </div>
+        @endif
+
+        @if($travelgrant->status == 2)
+        <div class="alert alert-danger fade in">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Note: This travel grant opportunity is discontinued.
         </div>
         @endif
 
@@ -68,7 +85,7 @@
             
               <p><b>Award</b>: {{ $travelgrant->award }}</p>
               @if($travelgrant->award_type)<p><b>Award type</b>: {{ $travelgrant->award_type }}</p>@endif
-              <p><b>Memberschip required?</b> (years): {{ $travelgrant->membership }}</p>
+              <p><b>Memberschip required?</b>: @if($travelgrant->membership == 0) No @elseif($travelgrant->membership == 1) Yes @else {{ $travelgrant->membership }} @endif</p>
               <p><b>Memberschip duration</b> (years): {{ $travelgrant->membership_time }}</p>  
               <p><b>Diversity</b>: {{ $travelgrant->diversity }}</p> 
               <p><b>Subjects</b>: 
@@ -89,8 +106,12 @@
 
         @if($travelgrant->comments)<p><b>Additional comments</b>: {{ $travelgrant->comments }}</p>@endif
 
-        <p><b>How to apply?</b> For further eligibility requirements and the application process, please visit the
-        <a href="{{ $travelgrant->url }}" target="_blank"><b>official website</b></a>.</p>
+        <p><b>How to apply?</b> For further eligibility requirements and the application process, please visit:
+        <a href="{{ $travelgrant->url }}" target="_blank">
+
+          <button type="button" class="btn btn-primary btn-large btn-block"><b>Travel Grant website</b></button>
+
+          </a></p>
         @include('partials.resource-status')       
          @if ($travelgrant->updated_at)
          <p>
@@ -107,15 +128,15 @@
         <small>Share this travel grant</small><br>
         <a href="https://twitter.com/intent/tweet?text={{$travelgrant->name}}&amp;url={{ urlencode(Request::fullUrl()) }}&amp;via=ecrcentral" target="_blank" title="Tweet" class="btn btn-social-icon btn-sm margin-half btn-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(Request::fullUrl()) }}" target="_blank" title="Share on Facebook" class="btn btn-social-icon btn-sm margin-half btn-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-        <a href="https://plus.google.com/share?url={{ urlencode(Request::fullUrl()) }}" target="_blank" title="Share on Google+" class="btn btn-social-icon btn-sm margin-half btn-google"><i class="fa fa-google" aria-hidden="true"></i></a>
         <a href="http://www.linkedin.com/shareArticle?url={{ urlencode(Request::fullUrl()) }}" target="_blank" title="Share on Linkedin" class="btn btn-social-icon btn-sm margin-half btn-linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+        <a href="http://service.weibo.com/share/share.php?url={{ urlencode(Request::fullUrl())}}&amp;title={{$travelgrant->name}}" target="_blank" class="btn btn-social-icon btn-sm margin-half btn-info"><i class="fa fa-weibo" aria-hidden="true"></i></a>
         <a href="mailto:?Subject={{$travelgrant->name}}&Body={{ urlencode(Request::fullUrl()) }}" target="_blank" title="Email to someone" class="btn btn-social-icon btn-sm margin-half btn-github"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         <div class="border-bottom"></div>
       </div>
 
       <div class="col-md-4">
         
-        <a href="/forums/channel/travel-grants"><button type="button" class="btn btn-primary btn-large btn-block"><b>Ask questions about this travel grant</b></button></a>
+        <a href="/{{ Config::get('chatter.routes.home') }}/channel/travel-grants"><button type="button" class="btn btn-primary btn-large btn-block"><b>Ask questions about this travel grant</b></button></a>
         <div class="border-bottom"></div>
       </div>
 
@@ -167,5 +188,14 @@
 @section('footer_scripts')
 
   @include('scripts.delete-modal-script')
+  <script type="text/javascript">
+    $(document).ready(function() {
+    $('.btn-social-icon').click(function(e) {
+        e.preventDefault();
+        window.open($(this).attr('href'), 'fbShareWindow', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+        return false;
+    });
+});
+  </script>
 
 @endsection

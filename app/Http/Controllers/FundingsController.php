@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Funding;
 use App\Models\Subject;
-
+use App\Models\CareerLevel;
 use App\Models\Funder;
 
 use App\Traits\CaptureIpTrait;
@@ -77,8 +77,11 @@ class FundingsController extends Controller
     {
         $fundings = Funding::all();
 
+        $career_levels = CareerLevel::all();
+
         $data = [
             'fundings' => $fundings,
+            'career_levels' => $career_levels,
         ];
 
         return view('fundings.create-funding')->with($data);
@@ -134,15 +137,19 @@ class FundingsController extends Controller
             'fileds' => $request->input('fileds'),
             'mobility_rule' => $request->input('mobility_rule'),
             'research_costs' => $request->input('research_costs'),
+            #'status' => $request->input('status'),
             'status' => 0,
             'featured' => 0,
             'user_id' => $user_id,
          
-        ]);
+        ]);        
 
         $funding->save();
+        $career_levels =  $request->input('career_levels');
 
-        Mail::to('azez.khan@gmail.com')->send(new FundingAdded($funding));
+        $funding->career_levels()->sync($career_levels);
+
+        Mail::to('ecrcentral@googlegroups.com')->send(new FundingAdded($funding));
 
         return redirect('fundings')->with('success', trans('fundings.createSuccess'));
     }
@@ -162,7 +169,7 @@ class FundingsController extends Controller
 
         $related_fundings = Funding::where('id', "!=", $funding->id)
             ->where('applicant_country', 'LIKE', '%' . $funding->applicant_country . '%')
-            ->orWhere('host_country', 'LIKE', '%' . $funding->host_country . '%')->paginate(8);
+            ->orWhere('host_country', 'LIKE', '%' . $funding->host_country . '%')->take(8)->get();
 
         $data = [
             'funding'        => $funding,

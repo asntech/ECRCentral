@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\TravelGrant;
 use App\Models\TravelPurpose;
+use App\Models\CareerLevel;
+
 
 use App\Traits\CaptureIpTrait;
 
@@ -65,9 +67,12 @@ class travelgrantsController extends Controller
         $travelgrants = TravelGrant::all();
         $purposes = TravelPurpose::all();
 
+        $career_levels = CareerLevel::all();
+
         $data = [
             'travelgrants' => $travelgrants,
             'purposes' => $purposes,
+            'career_levels' => $career_levels,
         ];
 
         return view('travelgrants.create-travelgrant')->with($data);
@@ -125,6 +130,7 @@ class travelgrantsController extends Controller
             'fields' => $request->input('fields'),
             'diversity' => $request->input('diversity'),
             'career_level' => $request->input('career_level'),
+            #'status' => $request->input('status'),
             'status' => 0,
             'featured' => 0,
             'user_id' => $user_id,
@@ -132,11 +138,13 @@ class travelgrantsController extends Controller
         ]);
 
         $purposes =  $request->input('purposes');
+        $career_levels =  $request->input('career_levels');
 
         $travelgrant->save();
         $travelgrant->purposes()->sync($purposes);
+        $travelgrant->career_levels()->sync($career_levels);
 
-        Mail::to('azez.khan@gmail.com')->send(new TravelGrantAdded($travelgrant));
+        Mail::to('ecrcentral@googlegroups.com')->send(new TravelGrantAdded($travelgrant));
 
         return redirect('travel-grants')->with('success', trans('travelgrants.createSuccess'));
     }
@@ -154,7 +162,8 @@ class travelgrantsController extends Controller
         $travelgrant = TravelGrant::where('slug', '=', $id)->orWhere('id', '=', $id)->firstOrFail();
 
         $related_travelgrants = TravelGrant::where('id', "!=", $travelgrant->id)
-             ->where('purpose', 'LIKE', '%' . $travelgrant->purpose . '%')->paginate(8);
+            ->where('purpose', 'LIKE', '%' . $travelgrant->purpose . '%')->take(8)->get();
+    
 
         $data = [
             'travelgrant'        => $travelgrant,

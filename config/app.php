@@ -189,10 +189,14 @@ return [
         App\Providers\LocalEnvironmentServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         jeremykenedy\laravelexceptionnotifier\LaravelExceptionNotifier::class,
+        jeremykenedy\LaravelLogger\LaravelLoggerServiceProvider::class,
+        jeremykenedy\LaravelHttps\LaravelHttpsServiceProvider::class,
+
 
         Laravel\Scout\ScoutServiceProvider::class,
         Laravelium\Feed\FeedServiceProvider::class,
         Laravelium\Sitemap\SitemapServiceProvider::class,
+        Spatie\Newsletter\NewsletterServiceProvider::class,
 
         #Laravolt\Avatar\ServiceProvider::class,
 
